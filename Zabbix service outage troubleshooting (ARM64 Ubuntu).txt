@@ -1,0 +1,14 @@
+# Zabbix服务中断故障修复（ARM64 Ubuntu）
+
+## 故障现象
+- 系统启动后卡在GRUB，无法进入桌面
+- Zabbix Server服务状态：`inactive (failed)`
+- 日志关键错误：`mount: mounting /mnt/data failed: No such file or directory`
+
+## 修复步骤
+1. **进入救援模式**：在GRUB编辑启动项，添加`init=/bin/bash`
+2. **修复文件系统**：
+   ```bash
+   mount -o rw,remount /          # 重点！修复根分区只读问题
+   /bin/cp /etc/fstab.bak /etc/fstab  # 绝对路径执行
+   mount -a                       # 验证挂载
